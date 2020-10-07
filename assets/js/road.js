@@ -16,9 +16,15 @@ class Road {
 static reset() {
    segments = [];
 
+   Road.addStraight(ROAD.LENGTH.MEDIUM);
+   Road.addLowRollingHills();
+   Road.addCurve(ROAD.LENGTH.LONG, ROAD.CURVE.MEDIUM, ROAD.HILL.SMALL);
+   Road.addBumps();
+   Road.addCurve(ROAD.LENGTH.LONG, ROAD.CURVE.MEDIUM, 0);
+   Road.addLowRollingHills();
+   Road.addSCurves(ROAD.HILL.LONG);
    Road.addStraight();
-   Road.addStraight();
-               Road.addStraight();
+   Road.addDownhillToEnd();
 
    segments[Segment.find(playerZ).index + 2].color = COLORS.START;
    segments[Segment.find(playerZ).index + 3].color = COLORS.START;
@@ -30,5 +36,53 @@ static reset() {
 static addStraight(num) {
    num = num || ROAD.LENGTH.MEDIUM;
    Road.add(num, num, num, 0, 0);
+ }
+
+ static addCurve(num, curve, height) {
+   num = num || ROAD.LENGTH.MEDIUM;
+   curve = curve || ROAD.CURVE.MEDIUM;
+   height = height || ROAD.HILL.NONE;
+   Road.add(num, num, num, curve, height);
+ }
+
+ static addHill(num, height) {
+   num = num || ROAD.LENGTH.MEDIUM;
+   height = height || ROAD.HILL.MEDIUM;
+   Road.add(num, num, num, 0, height);
+ }
+
+ static addLowRollingHills(num, height) {
+   num = num || ROAD.LENGTH.SHORT;
+   height = height || ROAD.HILL.LOW;
+   Road.add(num, num, num, 0, height / 2);
+   Road.add(num, num, num, 0, -height);
+   Road.add(num, num, num, 0, height);
+   Road.add(num, num, num, 0, 0);
+   Road.add(num, num, num, 0, height / 2);
+   Road.add(num, num, num, 0, 0);
+ }
+
+ static addBumps() {
+   Road.add(10, 10, 10, 0, 5);
+   Road.add(10, 10, 10, 0, -2);
+   Road.add(10, 10, 10, 0, -5);
+   Road.add(10, 10, 10, 0, 8);
+   Road.add(10, 10, 10, 0, 5);
+   Road.add(10, 10, 10, 0, -7);
+   Road.add(10, 10, 10, 0, 5);
+   Road.add(10, 10, 10, 0, -2);
+ }
+
+ static addDownhillToEnd(num) {
+   num = num || 200;
+   Road.add(num, num, num, -ROAD.CURVE.EASY, -Segment.lastY() / segmentLength);
+ }
+
+ static addSCurves() {
+   Road.add(ROAD.LENGTH.MEDIUM, ROAD.LENGTH.MEDIUM, ROAD.LENGTH.MEDIUM, -ROAD.CURVE.EASY);
+   Road.add(ROAD.LENGTH.MEDIUM, ROAD.LENGTH.MEDIUM, ROAD.LENGTH.MEDIUM, ROAD.CURVE.MEDIUM);
+   Road.add(ROAD.LENGTH.MEDIUM, ROAD.LENGTH.MEDIUM, ROAD.LENGTH.MEDIUM, ROAD.CURVE.EASY);
+   Road.add(ROAD.LENGTH.MEDIUM, ROAD.LENGTH.MEDIUM, ROAD.LENGTH.MEDIUM, -ROAD.CURVE.EASY);
+   Road.add(ROAD.LENGTH.MEDIUM, ROAD.LENGTH.MEDIUM, ROAD.LENGTH.MEDIUM, -ROAD.CURVE.MEDIUM);
  }
 }
